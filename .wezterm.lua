@@ -1,1 +1,32 @@
-local a=require'wezterm'local b={}b.font=a.font'Fira Code'b.font_size=12.0;b.color_scheme='Dracula'b.window_decorations="TITLE"b.use_fancy_tab_bar=true;b.integrated_title_button_style="Gnome"default_prog={"/usr/bin/fish"}b.default_prog=default_prog;local c=0.8;b.window_background_opacity=c;a.on("toggle-opacity",function(d,e)local f=d:get_config_overrides()or{}local g=f.window_background_opacity;if g then f.window_background_opacity=nil else f.window_background_opacity=b.window_background_opacity end;d:set_config_overrides(f)end)b.keys={{key="O",mods="CTRL",action=a.action.EmitEvent("toggle-opacity")}}return b
+local wezterm = require 'wezterm'
+local config = {}
+
+config.font = wezterm.font 'Fira Code'
+config.font_size = 12.0
+config.color_scheme = 'Dracula'
+config.window_decorations = "TITLE"
+config.enable_tab_bar = true
+config.integrated_title_button_style = "Gnome"
+
+local default_prog = { "/usr/bin/fish" }
+config.default_prog = default_prog
+
+local default_opacity = 0.8
+config.window_background_opacity = default_opacity
+
+wezterm.on("toggle-opacity", function(window, pane)
+  local overrides = window:get_config_overrides() or {}
+  local current_opacity = overrides.window_background_opacity
+  if current_opacity then
+    overrides.window_background_opacity = nil  -- Back to default (0.8)
+  else
+    overrides.window_background_opacity = 1.0  -- Opaque
+  end
+  window:set_config_overrides(overrides)
+end)
+
+config.keys = {
+  { key = "O", mods = "CTRL", action = wezterm.action.EmitEvent("toggle-opacity") }
+}
+
+return config
